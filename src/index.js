@@ -7,8 +7,11 @@ import { fileURLToPath } from 'url'
 
 import { applyCommonMiddlewares } from './middleware/common.js'
 import { register } from './controllers/auth.js'
+import { createPost } from './controllers/post.js'
 import authRoutes from './routes/auth.js'
 import userRoutes from './routes/user.js'
+import postRoutes from './routes/post.js'
+import { verifyToken } from './middleware/auth.js'
 
 // Configurations
 dotenv.config()
@@ -34,11 +37,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 // Routes with files
-app.post('/auth/register', upload.single('picture'), register)
+app.post('/auth/register', [upload.single('picture')], register)
+app.post('/post', [verifyToken, upload.single('picture')], createPost)
 
 // Routes
 app.use('/auth', authRoutes)
 app.use('/user', userRoutes)
+app.use('/post', postRoutes)
 
 // Mongoose setup
 mongoose
