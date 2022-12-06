@@ -5,9 +5,10 @@ import multer from 'multer'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+import { applyCommonMiddlewares } from './middleware/common.js'
 import { register } from './controllers/auth.js'
 import authRoutes from './routes/auth.js'
-import { applyCommonMiddlewares } from './middleware/common.js'
+import userRoutes from './routes/user.js'
 
 // Configurations
 dotenv.config()
@@ -37,6 +38,7 @@ app.post('/auth/register', upload.single('picture'), register)
 
 // Routes
 app.use('/auth', authRoutes)
+app.use('/user', userRoutes)
 
 // Mongoose setup
 mongoose
